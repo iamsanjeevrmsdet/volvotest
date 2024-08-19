@@ -1,0 +1,36 @@
+pipeline:
+  agent:
+    dockerfile:
+      filename: Dockerfile
+      reuseNode: true
+
+  stages:
+    - stage: "Setup"
+      steps:
+        - script:
+            sh: "echo 'Setting up test environment'"
+    
+    - stage: "Run Tests"
+      parallel:
+        chrome:
+          steps:
+            - script:
+                sh: "docker-compose run facebook-automation --browser=chrome"
+        firefox:
+          steps:
+            - script:
+                sh: "docker-compose run facebook-automation --browser=firefox"
+    
+    - stage: "Collect Reports"
+      steps:
+        - script:
+            sh: "echo 'Collecting reports'"
+            archiveArtifacts artifacts: 'reports/*.html', allowEmptyArchive: true
+
+  post:
+    success:
+      - script:
+          sh: "echo 'Tests passed'"
+    failure:
+      - script:
+          sh: "echo 'Some tests failed, please check the reports'"

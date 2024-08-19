@@ -1,0 +1,9 @@
+version: "3"
+services:
+  facebook-automation:
+    build: .
+    volumes:
+      - ./reports:/tests/reports  # Volume for report storage
+    environment:
+      - BROWSER_LIST=chrome,firefox
+    command: ["pytest", "--browser=chrome", "--html=report_chrome.html", "--self-contained-html"]
