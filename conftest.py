@@ -49,6 +49,6 @@ def load_json_data(file_path):
 
 @pytest.fixture(scope="module")
 def get_test_data():
-    data = load_json_data("test_data.json")
+    data = load_json_data("data/test_data.json")
     return data
 
